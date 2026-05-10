@@ -412,8 +412,8 @@
         <p>One subscription covers your whole family. The trial is 14 days, the full app — no feature locks.</p>
       </div>
       <div class="pricing-card">
-        <div class="price">£2.99 <small>/ ₹99 per month</small></div>
-        <div class="pricing-line"><span>+ £1 / ₹49</span><span>per additional parent watched</span></div>
+        <div class="price"><span data-price="base">£2.99</span> <small>per month</small></div>
+        <div class="pricing-line"><span>+ <span data-price="parent">£1</span></span><span>per additional parent watched</span></div>
         <ul class="pricing-list">
           <li><span class="check">✓</span> 14-day free trial — full app, no feature locks</li>
           <li><span class="check">✓</span> Unlimited family members on one subscription</li>
@@ -421,6 +421,7 @@
           <li><span class="check">✓</span> Works on Android (parent + family) and iPhone (family)</li>
           <li><span class="check">✓</span> Cancel anytime, from inside the app</li>
         </ul>
+        <p style="margin:18px 0 0;font-size:13px;color:var(--grey);" data-price="note">Prices shown in GBP. Your local store may show an equivalent local price.</p>
       </div>
     </div>
   </section>
@@ -542,7 +543,89 @@
   </div>
 </footer>
 
-<script>document.getElementById('year').textContent=new Date().getFullYear();</script>
+<script>
+  // Footer year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ---------- Localised pricing ----------
+  // Base anchor: £2.99 base + £1 per additional parent. Other currencies are
+  // psychological-pricing equivalents (round numbers in the local feel), not
+  // exact FX. The actual charge happens through Apple StoreKit / Google Play
+  // Billing, which converts the GBP base to the user's store currency.
+  const PRICING = {
+    GBP: { base: "£2.99", parent: "£1",      note: "Prices shown in GBP." },
+    USD: { base: "$3.99", parent: "$1",      note: "Prices shown in USD." },
+    EUR: { base: "€3.49", parent: "€1",      note: "Prices shown in EUR." },
+    INR: { base: "₹299",  parent: "₹99",     note: "Prices shown in INR." },
+    AUD: { base: "A$4.99",parent: "A$1.50",  note: "Prices shown in AUD." },
+    CAD: { base: "C$4.99",parent: "C$1.50",  note: "Prices shown in CAD." },
+    SGD: { base: "S$4.99",parent: "S$1.50",  note: "Prices shown in SGD." },
+    AED: { base: "AED 14.99", parent: "AED 4.99", note: "Prices shown in AED." },
+    JPY: { base: "¥499",  parent: "¥149",    note: "Prices shown in JPY." }
+  };
+
+  // Country → currency. Only countries we explicitly support; everything else
+  // falls back to GBP so the page never shows the wrong currency.
+  const COUNTRY_TO_CCY = {
+    GB: "GBP",
+    US: "USD",
+    IN: "INR",
+    AU: "AUD",
+    CA: "CAD",
+    SG: "SGD",
+    AE: "AED",
+    JP: "JPY",
+    // Eurozone
+    DE: "EUR", FR: "EUR", IT: "EUR", ES: "EUR", NL: "EUR", BE: "EUR",
+    AT: "EUR", IE: "EUR", PT: "EUR", FI: "EUR", GR: "EUR", LU: "EUR",
+    SK: "EUR", SI: "EUR", EE: "EUR", LV: "EUR", LT: "EUR", CY: "EUR", MT: "EUR"
+  };
+
+  // Timezone heuristic — instant, offline, ~80% accurate. Good enough as a
+  // first pass before any external geo lookup.
+  function countryFromTimezone() {
+    try {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+      const map = {
+        "Asia/Kolkata":"IN","Asia/Calcutta":"IN",
+        "Europe/London":"GB",
+        "Europe/Dublin":"IE",
+        "Europe/Paris":"FR","Europe/Berlin":"DE","Europe/Madrid":"ES",
+        "Europe/Rome":"IT","Europe/Amsterdam":"NL","Europe/Brussels":"BE",
+        "Europe/Vienna":"AT","Europe/Lisbon":"PT","Europe/Helsinki":"FI",
+        "Europe/Athens":"GR","Europe/Luxembourg":"LU",
+        "Asia/Dubai":"AE","Asia/Singapore":"SG","Asia/Tokyo":"JP",
+        "America/New_York":"US","America/Chicago":"US","America/Denver":"US",
+        "America/Los_Angeles":"US","America/Phoenix":"US","America/Anchorage":"US",
+        "America/Toronto":"CA","America/Vancouver":"CA","America/Edmonton":"CA",
+        "America/Halifax":"CA",
+        "Australia/Sydney":"AU","Australia/Melbourne":"AU","Australia/Brisbane":"AU",
+        "Australia/Perth":"AU","Australia/Adelaide":"AU"
+      };
+      return map[tz] || null;
+    } catch (e) { return null; }
+  }
+
+  // navigator.language fallback (e.g. "en-IN" → "IN")
+  function countryFromLanguage() {
+    const lang = (navigator.language || "").toUpperCase();
+    const m = lang.match(/-([A-Z]{2})$/);
+    return m ? m[1] : null;
+  }
+
+  function applyPricing(currency) {
+    const p = PRICING[currency] || PRICING.GBP;
+    document.querySelectorAll('[data-price="base"]').forEach(el => el.textContent = p.base);
+    document.querySelectorAll('[data-price="parent"]').forEach(el => el.textContent = p.parent);
+    document.querySelectorAll('[data-price="note"]').forEach(el => {
+      el.textContent = p.note + " Your local store will charge in your local currency.";
+    });
+  }
+
+  const country = countryFromTimezone() || countryFromLanguage();
+  const ccy = (country && COUNTRY_TO_CCY[country]) || "GBP";
+  applyPricing(ccy);
+</script>
 
 </body>
 </html>
