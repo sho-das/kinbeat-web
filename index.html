@@ -218,6 +218,18 @@
     .privacy .no{color:var(--red);font-weight:700}
     .privacy-card{background:linear-gradient(135deg,#FFF8F1,#FFEAD2);border:1px solid #F1D6B5;border-radius:var(--radius);padding:28px}
     .privacy-card h3{font-size:1.4rem}
+    .pricing-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+    @media(max-width:900px){.pricing-grid{grid-template-columns:1fr;gap:36px}}
+    .parent-shots{position:relative;display:flex;justify-content:center;align-items:center;gap:14px;padding:8px}
+    .shot{background:#1B1814;border-radius:32px;padding:8px;box-shadow:0 24px 50px -22px rgba(61,51,40,.4);width:100%;max-width:180px;flex:1 1 0}
+    .shot img{width:100%;height:auto;border-radius:24px;display:block}
+    .shot:nth-child(1){transform:rotate(-3deg) translateY(8px)}
+    .shot:nth-child(2){transform:translateY(-12px);z-index:2}
+    .shot:nth-child(3){transform:rotate(3deg) translateY(8px)}
+    @media(max-width:520px){
+      .parent-shots{flex-direction:column;gap:18px}
+      .shot{transform:none!important;max-width:240px}
+    }
     .pricing-card{background:var(--cream);border:1px solid var(--border);border-radius:var(--radius);padding:32px;text-align:center;max-width:540px;margin:0 auto;box-shadow:var(--shadow)}
     .pricing-card .price{font-size:3rem;font-weight:800;color:var(--brown);letter-spacing:-.02em}
     .pricing-card .price small{font-size:1rem;color:var(--grey);font-weight:600}
@@ -435,7 +447,7 @@
         <article class="step">
           <div class="step-num">1</div>
           <h3>Set up in five minutes</h3>
-          <p>Install KinBeat on your parent's Android phone. Grant the few permissions it asks for so it can keep watching reliably, even after a restart. Add the family members who should know, pick a sleep window, done.</p>
+          <p>Install KinBeat on your parent's Android phone, grant the permissions it asks for, and pick a sleep window. Add the family members who should know if something goes wrong.</p>
         </article>
         <article class="step">
           <div class="step-num">2</div>
@@ -533,6 +545,12 @@
         <h2>Honest, family-priced.</h2>
         <p>One subscription covers your whole family. The trial is 14 days, the full app - no feature locks.</p>
       </div>
+      <div class="pricing-grid">
+        <div class="parent-shots" aria-label="What the KinBeat parent app looks like">
+          <div class="shot"><img src="./app-shots/1000206322.jpg" alt="KinBeat parent home screen showing 'All is well'" /></div>
+          <div class="shot"><img src="./app-shots/1000206326.jpg" alt="KinBeat parent screen showing 'Monitoring paused'" /></div>
+          <div class="shot"><img src="./app-shots/1000206328.jpg" alt="KinBeat emergency screen offering to call 999" /></div>
+        </div>
       <div class="pricing-card">
         <div class="price"><span data-price="base">£2.99</span> <small>per month</small></div>
         <div class="pricing-line"><span>+ <span data-price="parent">£1</span></span><span>per additional parent watched</span></div>
@@ -544,6 +562,7 @@
           <li><span class="check">✓</span> Cancel anytime, from inside the app</li>
         </ul>
         <p style="margin:18px 0 0;font-size:13px;color:var(--grey);" data-price="note">Prices shown in GBP. Your local store may show an equivalent local price.</p>
+      </div>
       </div>
     </div>
   </section>
@@ -590,7 +609,7 @@
 
   <section class="cta-final">
     <div class="container">
-      <h2>Start the 14-day free trial today.</h2>
+      <h2>Start today - free for one parent.</h2>
       <p>It takes five minutes. Once it's set up, you'll go back to the rest of your life - and KinBeat will keep watching in the background, so you don't have to.</p>
       <div class="hero-ctas" style="justify-content:center;">
         <a class="badge" href="https://apps.apple.com/app/kinbeat/" aria-label="Download KinBeat on the App Store">
