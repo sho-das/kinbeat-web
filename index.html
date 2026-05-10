@@ -137,9 +137,16 @@
       .nav-links a:last-child{border-bottom:0}
     }
     section.hero{padding:clamp(36px,6vw,64px) 0 clamp(28px,5vw,48px);background:linear-gradient(180deg,var(--cream) 0%,var(--ivory) 100%)}
-    .hero-grid{display:grid;gap:clamp(16px,4vw,48px);grid-template-columns:1.05fr .95fr;align-items:start}
-    .hero-copy{align-self:center}
-    .hero-foot{margin-top:clamp(20px,3.5vw,36px)}
+    .hero-grid{display:grid;column-gap:clamp(16px,4vw,48px);row-gap:clamp(10px,1.6vw,18px);grid-template-columns:1.05fr .95fr;grid-template-areas:"head phone" "body phone";align-items:start}
+    .hero-head{grid-area:head;align-self:end}
+    .hero-body{grid-area:body;align-self:start}
+    .hero-phone{grid-area:phone;align-self:center}
+    @media(max-width:720px){
+      .hero-grid{grid-template-areas:"head phone" "body body";column-gap:clamp(12px,3vw,24px)}
+      .hero-head{align-self:center}
+      .hero-phone{align-self:start}
+      .hero-body{margin-top:clamp(14px,3vw,22px)}
+    }
     .eyebrow{display:inline-block;font-size:clamp(11px,1.4vw,13px);font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--orange-dark);background:var(--orange-light);padding:clamp(4px,.8vw,6px) clamp(8px,1.4vw,12px);border-radius:999px;margin-bottom:clamp(12px,2vw,18px)}
     .hero p.lede{font-size:clamp(.95rem,1.8vw,1.2rem);color:var(--grey);max-width:680px;margin:0}
     .hero-ctas{display:flex;flex-wrap:wrap;gap:clamp(8px,1.4vw,12px);margin-top:clamp(18px,3vw,28px)}
@@ -287,12 +294,12 @@
 
   <section class="hero">
     <div class="container hero-grid">
-      <div class="hero-copy">
+      <div class="hero-head">
         <span class="eyebrow">Free safety app for elderly parents</span>
         <h1>Know that mum and dad are okay - without watching over them.</h1>
       </div>
 
-      <div aria-hidden="true">
+      <div class="hero-phone" aria-hidden="true">
         <div class="phone">
           <div class="phone-notch"></div>
           <div class="phone-screen">
@@ -401,10 +408,9 @@
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="container hero-foot">
-      <p class="lede">
+      <div class="hero-body">
+        <p class="lede">
         KinBeat watches over your elderly parents using their phone's own motion sensor.
         If something feels wrong, every family member knows in seconds. No cameras. No GPS.
         Just peace of mind.
@@ -436,6 +442,7 @@
       <div class="hero-trust">
         <span class="dot" aria-hidden="true"></span>
         <span>14-day free trial · Works in 22 languages · No camera, no GPS</span>
+      </div>
       </div>
     </div>
   </section>
